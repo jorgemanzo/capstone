@@ -32,7 +32,7 @@ const EditSegment = () => {
   * We are going to use this "segments" variable to store segments are available for the user
   * to add to the paper.
   */
-  const [segments, setSegments] = useState([{name: '...', Id: 1, currentVersion: 1}]);
+  const [segments, setSegments] = useState([{name: '...', key: 1, id: 1, currentVersion: 1}]);
 
   /*
   * Another variable called "selected" is create, initialized as a list with a placeholder of element
@@ -40,7 +40,7 @@ const EditSegment = () => {
   * 
   * We use this variable to store the segments that have been added to the user's paper.
   */
-  const [selected, setSelected] = useState([{name: 'Click on the left to add Segments', Id: 1, currentVersion: 1}]);
+  const [selected, setSelected] = useState([{name: 'Click on the left to add Segments', key: 1, id: 1, currentVersion: 1}]);
   
   /*
   * This method provides us with the details of the user logged in.
@@ -103,7 +103,7 @@ const EditSegment = () => {
         if(getSelectedAndAllSegmentsResult.data.selectedSegments.length) {
           setSelected(getSelectedAndAllSegmentsResult.data.selectedSegments)
         } else {
-          setSelected([{name: 'Click on the left to add Segments', Id: 1, currentVersion: 1}])
+          setSelected([{name: 'Click on the left to add Segments', id: 1, currentVersion: 1}])
         }
         if(getSelectedAndAllSegmentsResult.data.allSegments.length) {
           const segmentsInPaper   = getSelectedAndAllSegmentsResult.data.selectedSegments.map(s => s.id)
@@ -157,7 +157,11 @@ const EditSegment = () => {
           <Divider />
           <Box>
             {segments.map((segment) => {
-              return <SegmentCardAll key={segment.id} name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOn} key={segment.id} />
+              return (
+                <div key={segment.id}>
+                  <SegmentCardAll name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOn}  />
+                </div>
+              )
             })}
           </Box>
         </Box>
@@ -168,7 +172,11 @@ const EditSegment = () => {
           <Divider />
           <Box>
           {selected.map((segment) => {
-            return <SegmentCardPaper key={segment.id} name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOff} key={segment.id} />
+            return (
+              <div key={segment.id}>
+                <SegmentCardPaper name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOff} />
+              </div>
+            )
           })}
           </Box>
         </Box>
