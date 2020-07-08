@@ -54,7 +54,7 @@ const EditSegment = () => {
 
   /*
   * This query gets all segments and all of the segments in this paper. Once it returns,
-  * the we take the difference of the two lists to determine which ones are not yet in
+  * we take the difference of the two lists to determine which ones are not yet in
   * the paper.
   * 
   * Once this query is executed, the value of getSelectedAndAllSegmentsResult will
@@ -63,7 +63,15 @@ const EditSegment = () => {
   * 
   * Because of the fact that this result updates multiple times as soon as the page
   * loads, updating the state of the app (and in turn the UI) causes major performance
-  * problems (too many redraws). To solve this, we use the useEffect() hook which
+  * problems (too many redraws). The multiple redraws happen because of this:
+  * 
+  * 1. The query is executed when the page loads.
+  * 2. The query finishes, and we set the new state(s) of the app (see above).
+  * 2. This causes the UI to redraw again.
+  * 3. The query is executed again when the page loads.
+  * 4. .... and again, and again, and again.
+  * 
+  * To solve this, we use the useEffect() hook which
   * will call a method to perform a state modification only after the getSelectedAndAllSegmentsResult
   * has changed. It works a bit like this:
   * 
