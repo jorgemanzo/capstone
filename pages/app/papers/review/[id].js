@@ -32,7 +32,7 @@ const EditSegment = () => {
   * We are going to use this "segments" variable to store segments are available for the user
   * to add to the paper.
   */
-  const [segments, setSegments] = useState([{name: '...', Id: 1, currentVersion: 1}]);
+  const [segments, setSegments] = useState([{name: '...', key: 1, id: 1, currentVersion: 1}]);
 
   /*
   * Another variable called "selected" is create, initialized as a list with a placeholder of element
@@ -40,7 +40,7 @@ const EditSegment = () => {
   * 
   * We use this variable to store the segments that have been added to the user's paper.
   */
-  const [selected, setSelected] = useState([{name: 'Click on the left to add Segments', Id: 1, currentVersion: 1}]);
+  const [selected, setSelected] = useState([{name: 'Click on the left to add Segments', key: 1, id: 1, currentVersion: 1}]);
   
   /*
   * This method provides us with the details of the user logged in.
@@ -54,7 +54,7 @@ const EditSegment = () => {
 
   /*
   * This query gets all segments and all of the segments in this paper. Once it returns,
-  * the we take the difference of the two lists to determine which ones are not yet in
+  * we take the difference of the two lists to determine which ones are not yet in
   * the paper.
   * 
   * Once this query is executed, the value of getSelectedAndAllSegmentsResult will
@@ -63,7 +63,15 @@ const EditSegment = () => {
   * 
   * Because of the fact that this result updates multiple times as soon as the page
   * loads, updating the state of the app (and in turn the UI) causes major performance
-  * problems (too many redraws). To solve this, we use the useEffect() hook which
+  * problems (too many redraws). The multiple redraws happen because of this:
+  * 
+  * 1. The query is executed when the page loads.
+  * 2. The query finishes, and we set the new state(s) of the app (see above).
+  * 2. This causes the UI to redraw again.
+  * 3. The query is executed again when the page loads.
+  * 4. .... and again, and again, and again.
+  * 
+  * To solve this, we use the useEffect() hook which
   * will call a method to perform a state modification only after the getSelectedAndAllSegmentsResult
   * has changed. It works a bit like this:
   * 
@@ -103,7 +111,7 @@ const EditSegment = () => {
         if(getSelectedAndAllSegmentsResult.data.selectedSegments.length) {
           setSelected(getSelectedAndAllSegmentsResult.data.selectedSegments)
         } else {
-          setSelected([{name: 'Click on the left to add Segments', Id: 1, currentVersion: 1}])
+          setSelected([{name: 'Click on the left to add Segments', id: 1, currentVersion: 1}])
         }
         if(getSelectedAndAllSegmentsResult.data.allSegments.length) {
           const segmentsInPaper   = getSelectedAndAllSegmentsResult.data.selectedSegments.map(s => s.id)
@@ -157,7 +165,11 @@ const EditSegment = () => {
           <Divider />
           <Box>
             {segments.map((segment) => {
-              return <SegmentCardAll key={segment.id} name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOn} key={segment.id} />
+              return (
+                <div key={segment.id}>
+                  <SegmentCardAll name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOn}  />
+                </div>
+              )
             })}
           </Box>
         </Box>
@@ -168,7 +180,11 @@ const EditSegment = () => {
           <Divider />
           <Box>
           {selected.map((segment) => {
-            return <SegmentCardPaper key={segment.id} name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOff} key={segment.id} />
+            return (
+              <div key={segment.id}>
+                <SegmentCardPaper name={segment.name} id={segment.id} version={segment.currentVersion} toggle={toggleOff} />
+              </div>
+            )
           })}
           </Box>
         </Box>
