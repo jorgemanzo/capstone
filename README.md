@@ -2,13 +2,20 @@
 
 Peerist will be a web application that allows academic writers to receive feedback on their writing without worrying about plagiarism. Users start by subbmiting portions of text as **Segments**. Then, when ready, a user can put together their segments into **Papers**. These papers can be shared into **Circles**, which the user can create, invite users, and set as private or public. This is the general use order of this application.
 
+![](./screenshots/dashboard.png)
+
 **Segment**
 
 A  limited  body  of  text  to  be  reviewed.  Segments  can  be  independently  versioned,  and  grouped  into  larger  works.
 
+![](./screenshots/viewing_segment.png)
+![](./screenshots/review_segment.png)
+
 **Paper**
 
 Papers are made of segments. Papers are independently versioned.
+
+![](./screenshots/editing_paper.png)
 
 **Circles**
 
@@ -25,6 +32,10 @@ This web application uses the following tools:
 - Hasura-GraphQL Engine as our database
 - URQL React Component Hooks
 - Docker & Docker Compose
+
+Here is a look at how we tested our GraphQL queries before including them in the application.
+
+![](./screenshots/hasura_explorer.png)
 
 ## Setup and run
 
